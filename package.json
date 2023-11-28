@@ -1,6 +1,6 @@
 {
   "name": "coode",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Codemode utilities",
   "keywords": [],
   "author": "Ivan Khanevich <help@iamkhan.tech>",
@@ -40,4 +40,3 @@
     "jscodeshift": "0.15.1"
   }
 }
-
