@@ -15,13 +15,14 @@
     "node": ">=20.0.0"
   },
   "files": [
-    "src"
+    "src",
+    "cli.js"
   ],
   "bin": {
-    "coode": "src/index.js"
+    "coode": "cli.js"
   },
   "scripts": {
-    "dev": "node src/index.js",
+    "dev": "node cli.js",
     "lint": "biome lint .",
     "lint:fix": "biome check --apply-unsafe .",
     "release": "npm run lint:fix && changelogen --release && npm publish && git push --follow-tags",
