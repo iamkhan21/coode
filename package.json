@@ -1,0 +1,42 @@
+{
+  "name": "coode",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "Ivan Khanevich <help@iamkhan.tech>",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/iamkhan21/coode/issues"
+  },
+  "homepage": "https://github.com/iamkhan21/coode#readme",
+  "repository": "iamkhan21/coode",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "files": [
+    "src"
+  ],
+  "bin": {
+    "coode": "src/index.js"
+  },
+  "scripts": {
+    "dev": "node src/index.js",
+    "lint": "biome lint .",
+    "lint:fix": "biome check --apply-unsafe .",
+    "release": "npm run lint:fix && changelogen --release && npm publish && git push --follow-tags",
+    "format": "npx @biomejs/biome format --write .",
+    "update": "nu -iL"
+  },
+  "devDependencies": {
+    "@antfu/ni": "0.21.12",
+    "@biomejs/biome": "1.4.0",
+    "changelogen": "0.5.5"
+  },
+  "dependencies": {
+    "@clack/prompts": "0.7.0",
+    "cleye": "1.3.2",
+    "jscodeshift": "0.15.1"
+  }
+}
+
