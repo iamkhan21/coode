@@ -2,7 +2,7 @@
 
 import fs from "node:fs";
 import { cli } from "cleye";
-import polyCommand from "./src/commands/poly";
+import polyCommand from "./src/commands/poly/index.js";
 
 const packageJson = JSON.parse(fs.readFileSync("./package.json", "utf8"));
 
