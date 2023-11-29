@@ -9,11 +9,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function fetchTextsFromJSXElements({
-	scanDir = "src",
-	moduleName = "translations",
-	importName = "translations",
+	scanDir,
+	moduleName,
+	importName,
 	tempTranslationsDir,
-} = {}) {
+}) {
 	const TRANSFORM_PATH = path.join(__dirname, "./task.cjs");
 	const FILE_PATH = [path.resolve(process.cwd(), scanDir)];
 
@@ -31,9 +31,9 @@ function fetchTextsFromJSXElements({
 }
 
 function uniteTranslationsIntoOneFile({
-	translationFilePath = "translations/en.json",
+	translationFilePath,
 	tempTranslationsDir,
-} = {}) {
+}) {
 	const finalTranslationFilePath = path.resolve(
 		process.cwd(),
 		translationFilePath,
@@ -45,6 +45,13 @@ function uniteTranslationsIntoOneFile({
 		finalTranslations = JSON.parse(
 			fs.readFileSync(finalTranslationFilePath, "utf8"),
 		);
+	} else {
+		fs.mkdirSync(path.dirname(finalTranslationFilePath), { recursive: true });
+	}
+
+	// Check if the temp dir exists
+	if (!fs.existsSync(tempTranslationsDir)) {
+		return;
 	}
 
 	const files = fs.readdirSync(tempTranslationsDir);
@@ -74,8 +81,23 @@ function uniteTranslationsIntoOneFile({
 async function poly(argv) {
 	const tempTranslationsDir = path.resolve(process.cwd(), randomUUID());
 
-	await fetchTextsFromJSXElements({ tempTranslationsDir });
-	uniteTranslationsIntoOneFile({ tempTranslationsDir });
+	const {
+		"scan-dir": scanDir,
+		"module-name": moduleName,
+		"import-name": importName,
+		"translation-file-path": translationFilePath,
+	} = argv.flags;
+
+	await fetchTextsFromJSXElements({
+		scanDir,
+		moduleName,
+		importName,
+		tempTranslationsDir,
+	});
+	uniteTranslationsIntoOneFile({
+		translationFilePath,
+		tempTranslationsDir,
+	});
 }
 
 const polyCommand = command(
@@ -83,6 +105,28 @@ const polyCommand = command(
 		name: "poly",
 		alias: "p",
 		parameters: [],
+		flags: {
+			"scan-dir": {
+				type: String,
+				alias: "s",
+				default: "src",
+			},
+			"module-name": {
+				type: String,
+				alias: "m",
+				default: "translations",
+			},
+			"import-name": {
+				type: String,
+				alias: "i",
+				default: "translations",
+			},
+			"translation-file-path": {
+				type: String,
+				alias: "t",
+				default: "translations/en.json",
+			},
+		},
 		help: {
 			description: "Fetch texts and insert translation keys instead of them",
 		},
