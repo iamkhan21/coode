@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.2.0
+
+[compare changes](https://github.com/iamkhan21/coode/compare/v1.1.0...v1.2.0)
+
+### 🚀 Enhancements
+
+- Refactor 'poly' command to take flag-based arguments and improve resiliency ([448ed37](https://github.com/iamkhan21/coode/commit/448ed37))
+
+### ❤️ Contributors
+
+- Ivan Khanevich <mail@iamkhan.tech>
+
 ## v1.1.0
 
 [compare changes](https://github.com/iamkhan21/coode/compare/v1.0.2...v1.1.0)
