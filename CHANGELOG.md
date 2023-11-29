@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.1.0
+
+[compare changes](https://github.com/iamkhan21/coode/compare/v1.0.2...v1.1.0)
+
+### 🚀 Enhancements
+
+- Add scripts for fetching translations ([2185cbb](https://github.com/iamkhan21/coode/commit/2185cbb))
+
+### ❤️ Contributors
+
+- Ivan Khanevich <mail@iamkhan.tech>
+
 ## v1.0.2
 
 [compare changes](https://github.com/iamkhan21/coode/compare/v1.0.1...v1.0.2)
