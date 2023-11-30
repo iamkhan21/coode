@@ -25,6 +25,7 @@ function fetchTextsFromJSXElements({
 			importName,
 			tempTranslationsDir,
 		},
+		verbose: 1,
 	};
 
 	return jscodeshift(TRANSFORM_PATH, FILE_PATH, options);
@@ -94,6 +95,7 @@ async function poly(argv) {
 		importName,
 		tempTranslationsDir,
 	});
+
 	uniteTranslationsIntoOneFile({
 		translationFilePath,
 		tempTranslationsDir,

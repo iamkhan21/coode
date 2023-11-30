@@ -22,7 +22,7 @@
     "coode": "cli.js"
   },
   "scripts": {
-    "dev": "node cli.js",
+    "dev": "node cli.js p",
     "lint": "biome lint .",
     "lint:fix": "biome check --apply-unsafe .",
     "release": "nr lint:fix && changelogen --release && npm publish && git push --follow-tags",

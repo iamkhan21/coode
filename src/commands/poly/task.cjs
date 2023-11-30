@@ -47,6 +47,16 @@ function getTextAbbr(text) {
 	return convertToSnakeCase(text.split(".")[0].trim().toLowerCase());
 }
 
+const attributeNames = [
+	"title",
+	"label",
+	"placeholder",
+	"alt",
+	"description",
+	"helperText",
+	"helper",
+];
+
 module.exports = (fileInfo, api, options) => {
 	// Define the module and the import name
 	const { moduleName, tempTranslationsDir, importName } = options.meta;
@@ -62,36 +72,74 @@ module.exports = (fileInfo, api, options) => {
 
 	const translations = {};
 
+	const JSXElement = root.find(j.JSXElement);
+
 	// biome-ignore lint: forEach is inbuilt method to iterate nodes
-	root
-		.find(j.JSXElement)
-		.find(j.JSXText)
-		.forEach((path) => {
-			const text = path.node.value?.trim();
+	JSXElement.find(j.JSXText).forEach((path) => {
+		const text = path.node.value?.trim();
 
-			if (text) {
-				const textAbbr = getTextAbbr(text);
+		if (text) {
+			const textAbbr = getTextAbbr(text);
 
-				if (!translations[textAbbr]) {
-					translations[textAbbr] = text;
+			if (!translations[textAbbr]) {
+				translations[textAbbr] = text;
+			}
+
+			// Replace text in original file
+			j(path).replaceWith(
+				j.jsxExpressionContainer(
+					j.memberExpression(
+						j.memberExpression(
+							j.identifier(importName),
+							j.stringLiteral(pageNameAbbr),
+							true,
+						),
+						j.stringLiteral(textAbbr),
+						true,
+					),
+				),
+			);
+		}
+	});
+
+	// biome-ignore lint: forEach is inbuilt method to iterate nodes
+	JSXElement.find(j.JSXAttribute).forEach((path) => {
+		const node = path.node;
+		const attributeName = node.name.name;
+		const value = node.value;
+
+		if (attributeNames.includes(attributeName)) {
+			if ([value?.type, value?.expression?.type].includes("StringLiteral")) {
+				const text = (value.value || value.expression.value)?.trim();
+
+				if (text) {
+					const textAbbr = getTextAbbr(text);
+
+					if (!translations[textAbbr]) {
+						translations[textAbbr] = text;
+					}
 
 					// Replace text in original file
 					j(path).replaceWith(
-						j.jsxExpressionContainer(
-							j.memberExpression(
+						j.jsxAttribute(
+							j.jsxIdentifier(attributeName),
+							j.jsxExpressionContainer(
 								j.memberExpression(
-									j.identifier(importName),
-									j.stringLiteral(pageNameAbbr),
+									j.memberExpression(
+										j.identifier(importName),
+										j.stringLiteral(pageNameAbbr),
+										true,
+									),
+									j.stringLiteral(textAbbr),
 									true,
 								),
-								j.stringLiteral(textAbbr),
-								true,
 							),
 						),
 					);
 				}
 			}
-		});
+		}
+	});
 
 	if (!Object.keys(translations).length) {
 		return root.source;
@@ -102,7 +150,7 @@ module.exports = (fileInfo, api, options) => {
 		root
 			.find(j.ImportDeclaration, {
 				source: {
-					type: "Literal",
+					type: "StringLiteral",
 					value: moduleName,
 				},
 			})
