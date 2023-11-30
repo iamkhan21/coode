@@ -48,18 +48,23 @@ function getTextAbbr(text) {
 }
 
 const attributeNames = [
-	"title",
-	"label",
-	"placeholder",
 	"alt",
 	"description",
-	"helperText",
 	"helper",
+	"helperText",
+	"label",
+	"placeholder",
+	"title",
 ];
 
 module.exports = (fileInfo, api, options) => {
 	// Define the module and the import name
 	const { moduleName, tempTranslationsDir, importName } = options.meta;
+
+	if (fileInfo.path.includes("test")) {
+		console.log(`Skipping test file: ${fileInfo.path}`);
+		return fileInfo.source; // Return original source without changes
+	}
 
 	const j = api.jscodeshift;
 	const root = j(fileInfo.source);
@@ -80,6 +85,11 @@ module.exports = (fileInfo, api, options) => {
 
 		if (text) {
 			const textAbbr = getTextAbbr(text);
+
+			// check if text abbreviation is empty string, if so, skip
+			if (!textAbbr) {
+				return;
+			}
 
 			if (!translations[textAbbr]) {
 				translations[textAbbr] = text;
@@ -114,6 +124,10 @@ module.exports = (fileInfo, api, options) => {
 
 				if (text) {
 					const textAbbr = getTextAbbr(text);
+
+					if (!textAbbr) {
+						return;
+					}
 
 					if (!translations[textAbbr]) {
 						translations[textAbbr] = text;
