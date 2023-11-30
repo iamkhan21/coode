@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v1.3.1
+
+[compare changes](https://github.com/iamkhan21/coode/compare/v1.3.0...v1.3.1)
+
+### 🏡 Chore
+
+- Remove redundant codes in ee.tsx and enhance task.cjs ([3546cf0](https://github.com/iamkhan21/coode/commit/3546cf0))
+- Add removeFormatting function in task.cjs ([1360898](https://github.com/iamkhan21/coode/commit/1360898))
+
+### ❤️ Contributors
+
+- Ivan Khanevich <mail@iamkhan.tech>
+
 ## v1.3.0
 
 [compare changes](https://github.com/iamkhan21/coode/compare/v1.2.0...v1.3.0)
