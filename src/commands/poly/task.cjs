@@ -38,6 +38,18 @@ function getPageNameAbbr(filePath) {
 }
 
 /**
+ * Removes formatting from a given string.
+ *
+ * @param {string} str - The string to be cleaned.
+ * @returns {string} - The string with formatting removed.
+ */
+function removeFormatting(str) {
+	return str
+		.replace(/\s+/g, " ") // Replace multiple whitespace characters with a single space
+		.trim();
+}
+
+/**
  * Returns the abbreviated form of a given text.
  *
  * @param {string} text - The text to be abbreviated.
@@ -92,7 +104,7 @@ module.exports = (fileInfo, api, options) => {
 			}
 
 			if (!translations[textAbbr]) {
-				translations[textAbbr] = text;
+				translations[textAbbr] = removeFormatting(text);
 			}
 
 			// Replace text in original file
@@ -130,7 +142,7 @@ module.exports = (fileInfo, api, options) => {
 					}
 
 					if (!translations[textAbbr]) {
-						translations[textAbbr] = text;
+						translations[textAbbr] = removeFormatting(text);
 					}
 
 					// Replace text in original file
