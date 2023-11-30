@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.3.0
+
+[compare changes](https://github.com/iamkhan21/coode/compare/v1.2.0...v1.3.0)
+
+### 🚀 Enhancements
+
+- Update src/commands/poly/task.cjs for improved adaptability ([6936bdd](https://github.com/iamkhan21/coode/commit/6936bdd))
+
+### ❤️ Contributors
+
+- Ivan Khanevich <mail@iamkhan.tech>
+
 ## v1.2.0
 
 [compare changes](https://github.com/iamkhan21/coode/compare/v1.1.0...v1.2.0)
