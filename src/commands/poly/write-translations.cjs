@@ -31,6 +31,26 @@ function deepMerge(target, source) {
 	return target;
 }
 
+function createASTNodeFromValue(j, value) {
+	if (value === null) {
+		return j.literal(null);
+	}
+	if (typeof value === "string") {
+		return j.stringLiteral(value);
+	}
+	if (typeof value === "number") {
+		return j.numericLiteral(value);
+	}
+	if (typeof value === "boolean") {
+		return j.booleanLiteral(value);
+	}
+	if (typeof value === "undefined") {
+		return j.identifier("undefined");
+	}
+	// Handle other types as needed
+	throw new Error(`Unsupported type for AST node: ${typeof value}`);
+}
+
 module.exports = (fileInfo, api, options) => {
 	const j = api.jscodeshift;
 	const root = j(fileInfo.source);
@@ -79,13 +99,17 @@ module.exports = (fileInfo, api, options) => {
 									j.property(
 										"init",
 										j.literal(innerKey),
-										j.literal(innerValue),
+										createASTNodeFromValue(j, innerValue),
 									),
 								),
 							),
 						);
 					}
-					return j.property("init", j.literal(key), j.literal(value));
+					return j.property(
+						"init",
+						j.literal(key),
+						createASTNodeFromValue(j, value),
+					);
 				},
 			);
 
