@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.4.3
+
+[compare changes](https://github.com/iamkhan21/coode/compare/v1.4.2...v1.4.3)
+
+### 🩹 Fixes
+
+- Enhance deepMerge function to handle arrays in write-translations.cjs ([09ee9b5](https://github.com/iamkhan21/coode/commit/09ee9b5))
+
+### ❤️ Contributors
+
+- Ivan Khanevich <mail@iamkhan.tech>
+
 ## v1.4.2
 
 [compare changes](https://github.com/iamkhan21/coode/compare/v1.4.1...v1.4.2)
