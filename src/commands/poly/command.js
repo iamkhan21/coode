@@ -14,7 +14,7 @@ function fetchTextsFromJSXElements({
 	importName,
 	tempTranslationsDir,
 }) {
-	const TRANSFORM_PATH = path.join(__dirname, "./task.cjs");
+	const TRANSFORM_PATH = path.join(__dirname, "./gather-translations.cjs");
 	const FILE_PATH = [path.resolve(process.cwd(), scanDir)];
 
 	const options = {
@@ -35,48 +35,18 @@ function uniteTranslationsIntoOneFile({
 	translationFilePath,
 	tempTranslationsDir,
 }) {
-	const finalTranslationFilePath = path.resolve(
-		process.cwd(),
-		translationFilePath,
-	);
+	const TRANSFORM_PATH = path.join(__dirname, "./write-translations.cjs");
+	const FILE_PATH = [path.resolve(process.cwd(), translationFilePath)];
 
-	// Read existing final translations
-	let finalTranslations = {};
-	if (fs.existsSync(finalTranslationFilePath)) {
-		finalTranslations = JSON.parse(
-			fs.readFileSync(finalTranslationFilePath, "utf8"),
-		);
-	} else {
-		fs.mkdirSync(path.dirname(finalTranslationFilePath), { recursive: true });
-	}
+	const options = {
+		parser: "tsx",
+		meta: {
+			tempTranslationsDir,
+		},
+		verbose: 1,
+	};
 
-	// Check if the temp dir exists
-	if (!fs.existsSync(tempTranslationsDir)) {
-		return;
-	}
-
-	const files = fs.readdirSync(tempTranslationsDir);
-
-	for (const file of files) {
-		const filePath = path.join(tempTranslationsDir, file);
-		const fileTranslations = JSON.parse(fs.readFileSync(filePath, "utf8"));
-
-		for (const pageNameAbbr of Object.keys(fileTranslations)) {
-			finalTranslations[pageNameAbbr] = {
-				...finalTranslations[pageNameAbbr],
-				...fileTranslations[pageNameAbbr],
-			};
-		}
-	}
-
-	// Delete the temp dir after all merges
-	fs.rmSync(tempTranslationsDir, { recursive: true });
-
-	// Write the merged translations to the final file
-	fs.writeFileSync(
-		finalTranslationFilePath,
-		JSON.stringify(finalTranslations, null, 2),
-	);
+	return jscodeshift(TRANSFORM_PATH, FILE_PATH, options);
 }
 
 async function poly(argv) {
@@ -96,10 +66,13 @@ async function poly(argv) {
 		tempTranslationsDir,
 	});
 
-	uniteTranslationsIntoOneFile({
+	await uniteTranslationsIntoOneFile({
 		translationFilePath,
 		tempTranslationsDir,
 	});
+
+	// Remove temp translations dir
+	fs.rmSync(tempTranslationsDir, { recursive: true });
 }
 
 const polyCommand = command(
@@ -126,7 +99,7 @@ const polyCommand = command(
 			"translation-file-path": {
 				type: String,
 				alias: "t",
-				default: "translations/en.json",
+				default: "translations/en.ts",
 			},
 		},
 		help: {
