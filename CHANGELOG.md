@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.4.2
+
+[compare changes](https://github.com/iamkhan21/coode/compare/v1.4.1...v1.4.2)
+
+### 🩹 Fixes
+
+- Fix potential 'undefined' errors in write-translations.cjs ([5f021cd](https://github.com/iamkhan21/coode/commit/5f021cd))
+
+### ❤️ Contributors
+
+- Ivan Khanevich <mail@iamkhan.tech>
+
 ## v1.4.1
 
 [compare changes](https://github.com/iamkhan21/coode/compare/v1.4.0...v1.4.1)
