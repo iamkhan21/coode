@@ -17,7 +17,11 @@ function readJSONFilesFromDir(dirPath) {
 // Deep merge function
 function deepMerge(target, source) {
 	for (const key in source) {
-		if (source[key] && typeof source[key] === "object") {
+		if (
+			source[key] &&
+			typeof source[key] === "object" &&
+			!Array.isArray(source[key])
+		) {
 			target[key] = target[key] || {};
 			deepMerge(target[key], source[key]);
 		} else {
@@ -41,38 +45,48 @@ module.exports = (fileInfo, api, options) => {
 			id: { name: "translations" },
 		})
 		.forEach((path) => {
-			// Convert existing AST properties to an object
-			const existingProperties =
-				path.node.init.properties?.reduce((acc, prop) => {
-					const key = prop.key.name;
-					acc[key] =
-						prop.value.properties?.reduce((innerAcc, innerProp) => {
-							innerAcc[innerProp.key.name] = innerProp.value.value;
+			const existingProperties = path.node.init.properties.reduce(
+				(acc, prop) => {
+					const key =
+						prop.key.type === "Identifier" ? prop.key.name : prop.key.value;
+					if (prop.value.type === "ObjectExpression") {
+						acc[key] = prop.value.properties.reduce((innerAcc, innerProp) => {
+							const innerKey =
+								innerProp.key.type === "Identifier"
+									? innerProp.key.name
+									: innerProp.key.value;
+							innerAcc[innerKey] = innerProp.value.value;
 							return innerAcc;
-						}, {}) || {};
+						}, {});
+					} else {
+						acc[key] = prop.value.value;
+					}
 					return acc;
-				}, {}) || {};
+				},
+				{},
+			);
 
-			// Deep merge existing and new translations
-			const mergedTranslations =
-				deepMerge(existingProperties, newTranslations) || {};
+			const mergedTranslations = deepMerge(existingProperties, newTranslations);
 
-			// Convert merged translations back to AST properties
 			const properties = Object.entries(mergedTranslations).map(
-				([key, value]) =>
-					j.property(
-						"init",
-						j.identifier(key),
-						j.objectExpression(
-							Object.entries(value).map(([innerKey, innerValue]) =>
-								j.property(
-									"init",
-									j.identifier(innerKey),
-									j.literal(innerValue),
+				([key, value]) => {
+					if (typeof value === "object" && !Array.isArray(value)) {
+						return j.property(
+							"init",
+							j.literal(key),
+							j.objectExpression(
+								Object.entries(value).map(([innerKey, innerValue]) =>
+									j.property(
+										"init",
+										j.literal(innerKey),
+										j.literal(innerValue),
+									),
 								),
 							),
-						),
-					),
+						);
+					}
+					return j.property("init", j.literal(key), j.literal(value));
+				},
 			);
 
 			path.node.init = j.objectExpression(properties);
