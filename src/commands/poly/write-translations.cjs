@@ -45,15 +45,17 @@ module.exports = (fileInfo, api, options) => {
 			const existingProperties =
 				path.node.init.properties?.reduce((acc, prop) => {
 					const key = prop.key.name;
-					acc[key] = prop.value.properties?.reduce((innerAcc, innerProp) => {
-						innerAcc[innerProp.key.name] = innerProp.value.value;
-						return innerAcc;
-					}, {});
+					acc[key] =
+						prop.value.properties?.reduce((innerAcc, innerProp) => {
+							innerAcc[innerProp.key.name] = innerProp.value.value;
+							return innerAcc;
+						}, {}) || {};
 					return acc;
 				}, {}) || {};
 
 			// Deep merge existing and new translations
-			const mergedTranslations = deepMerge(existingProperties, newTranslations);
+			const mergedTranslations =
+				deepMerge(existingProperties, newTranslations) || {};
 
 			// Convert merged translations back to AST properties
 			const properties = Object.entries(mergedTranslations).map(
