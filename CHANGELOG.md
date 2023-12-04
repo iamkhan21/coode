@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.4.0
+
+[compare changes](https://github.com/iamkhan21/coode/compare/v1.3.1...v1.4.0)
+
+### 🚀 Enhancements
+
+- Add functionality to gather and write JSON translations ([bdf058e](https://github.com/iamkhan21/coode/commit/bdf058e))
+
+### ❤️ Contributors
+
+- Ivan Khanevich <mail@iamkhan.tech>
+
 ## v1.3.1
 
 [compare changes](https://github.com/iamkhan21/coode/compare/v1.3.0...v1.3.1)
