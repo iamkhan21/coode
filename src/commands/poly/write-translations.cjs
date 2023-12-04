@@ -35,18 +35,23 @@ function createASTNodeFromValue(j, value) {
 	if (value === null) {
 		return j.literal(null);
 	}
+
 	if (typeof value === "string") {
 		return j.stringLiteral(value);
 	}
+
 	if (typeof value === "number") {
 		return j.numericLiteral(value);
 	}
+
 	if (typeof value === "boolean") {
 		return j.booleanLiteral(value);
 	}
+
 	if (typeof value === "undefined") {
 		return j.identifier("undefined");
 	}
+
 	// Handle other types as needed
 	throw new Error(`Unsupported type for AST node: ${typeof value}`);
 }

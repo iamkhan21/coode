@@ -1,18 +1,22 @@
 # Changelog
 
 
-## v1.4.4
+## v1.4.5
 
-[compare changes](https://github.com/iamkhan21/coode/compare/v1.4.3...v1.4.4)
+[compare changes](https://github.com/iamkhan21/coode/compare/v1.4.4...v1.4.5)
 
 ### 🏡 Chore
 
-- **release:** V1.4.3 ([78eb72b](https://github.com/iamkhan21/coode/commit/78eb72b))
-- Add function to handle multiple data types in AST Nodes ([598e056](https://github.com/iamkhan21/coode/commit/598e056))
+- **release:** V1.4.4 ([abf24bb](https://github.com/iamkhan21/coode/commit/abf24bb))
+- Add whitespace after conditionals in write-translations.cjs ([bf1c992](https://github.com/iamkhan21/coode/commit/bf1c992))
 
 ### ❤️ Contributors
 
 - Ivan Khanevich <mail@iamkhan.tech>
+
+## v1.4.4
+
+[compare changes](https://github.com/iamkhan21/coode/compare/v1.4.4...v1.4.4)
 
 ## v1.4.3
 
