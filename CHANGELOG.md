@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.4.1
+
+[compare changes](https://github.com/iamkhan21/coode/compare/v1.4.0...v1.4.1)
+
+### 🩹 Fixes
+
+- Implement optional chaining in write-translations.cjs ([1f03114](https://github.com/iamkhan21/coode/commit/1f03114))
+
+### ❤️ Contributors
+
+- Ivan Khanevich <mail@iamkhan.tech>
+
 ## v1.4.0
 
 [compare changes](https://github.com/iamkhan21/coode/compare/v1.3.1...v1.4.0)
