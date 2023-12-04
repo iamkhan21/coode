@@ -42,17 +42,15 @@ module.exports = (fileInfo, api, options) => {
 		})
 		.forEach((path) => {
 			// Convert existing AST properties to an object
-			const existingProperties = path.node.init.properties.reduce(
-				(acc, prop) => {
+			const existingProperties =
+				path.node.init.properties?.reduce((acc, prop) => {
 					const key = prop.key.name;
-					acc[key] = prop.value.properties.reduce((innerAcc, innerProp) => {
+					acc[key] = prop.value.properties?.reduce((innerAcc, innerProp) => {
 						innerAcc[innerProp.key.name] = innerProp.value.value;
 						return innerAcc;
 					}, {});
 					return acc;
-				},
-				{},
-			);
+				}, {}) || {};
 
 			// Deep merge existing and new translations
 			const mergedTranslations = deepMerge(existingProperties, newTranslations);
