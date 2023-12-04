@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v1.4.4
+
+[compare changes](https://github.com/iamkhan21/coode/compare/v1.4.3...v1.4.4)
+
+### 🏡 Chore
+
+- **release:** V1.4.3 ([78eb72b](https://github.com/iamkhan21/coode/commit/78eb72b))
+- Add function to handle multiple data types in AST Nodes ([598e056](https://github.com/iamkhan21/coode/commit/598e056))
+
+### ❤️ Contributors
+
+- Ivan Khanevich <mail@iamkhan.tech>
+
 ## v1.4.3
 
 [compare changes](https://github.com/iamkhan21/coode/compare/v1.4.2...v1.4.3)
