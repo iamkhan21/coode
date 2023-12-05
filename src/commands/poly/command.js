@@ -34,6 +34,7 @@ function fetchTextsFromJSXElements({
 function uniteTranslationsIntoOneFile({
 	translationFilePath,
 	tempTranslationsDir,
+	translationVariableName,
 }) {
 	const TRANSFORM_PATH = path.join(__dirname, "./write-translations.cjs");
 	const FILE_PATH = [path.resolve(process.cwd(), translationFilePath)];
@@ -42,6 +43,7 @@ function uniteTranslationsIntoOneFile({
 		parser: "tsx",
 		meta: {
 			tempTranslationsDir,
+			translationVariableName,
 		},
 		verbose: 1,
 	};
@@ -57,6 +59,7 @@ async function poly(argv) {
 		"module-name": moduleName,
 		"import-name": importName,
 		"translation-file-path": translationFilePath,
+		"translation-variable-name": translationVariableName,
 	} = argv.flags;
 
 	await fetchTextsFromJSXElements({
@@ -69,6 +72,7 @@ async function poly(argv) {
 	await uniteTranslationsIntoOneFile({
 		translationFilePath,
 		tempTranslationsDir,
+		translationVariableName,
 	});
 
 	// Remove temp translations dir
@@ -100,6 +104,11 @@ const polyCommand = command(
 				type: String,
 				alias: "t",
 				default: "translations/en.ts",
+			},
+			"translation-variable-name": {
+				type: String,
+				alias: "v",
+				default: "translations",
 			},
 		},
 		help: {

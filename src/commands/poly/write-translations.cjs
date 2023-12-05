@@ -18,14 +18,15 @@ module.exports = (fileInfo, api, options) => {
 	const j = api.jscodeshift;
 	const root = j(fileInfo.source);
 
-	const translationDir = options.meta.tempTranslationsDir;
+	const { tempTranslationsDir: translationDir, translationVariableName } =
+		options.meta;
 
 	const newTranslations = readJSONFilesFromDir(translationDir);
 
 	// biome-ignore lint: forEach is inbuilt method to iterate nodes
 	root
 		.find(j.VariableDeclarator, {
-			id: { name: "translations" },
+			id: { name: translationVariableName },
 		})
 		.forEach((path) => {
 			// Step 1: go through the existing properties and check do they exist in the new translations object
