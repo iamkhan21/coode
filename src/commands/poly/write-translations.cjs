@@ -14,48 +14,6 @@ function readJSONFilesFromDir(dirPath) {
 	return translations;
 }
 
-// Deep merge function
-function deepMerge(target, source) {
-	for (const key in source) {
-		if (
-			source[key] &&
-			typeof source[key] === "object" &&
-			!Array.isArray(source[key])
-		) {
-			target[key] = target[key] || {};
-			deepMerge(target[key], source[key]);
-		} else {
-			target[key] = source[key];
-		}
-	}
-	return target;
-}
-
-function createASTNodeFromValue(j, value) {
-	if (value === null) {
-		return j.literal(null);
-	}
-
-	if (typeof value === "string") {
-		return j.stringLiteral(value);
-	}
-
-	if (typeof value === "number") {
-		return j.numericLiteral(value);
-	}
-
-	if (typeof value === "boolean") {
-		return j.booleanLiteral(value);
-	}
-
-	if (typeof value === "undefined") {
-		return j.identifier("undefined");
-	}
-
-	// Handle other types as needed
-	throw new Error(`Unsupported type for AST node: ${typeof value}`);
-}
-
 module.exports = (fileInfo, api, options) => {
 	const j = api.jscodeshift;
 	const root = j(fileInfo.source);
@@ -70,55 +28,57 @@ module.exports = (fileInfo, api, options) => {
 			id: { name: "translations" },
 		})
 		.forEach((path) => {
-			const existingProperties = path.node.init.properties.reduce(
-				(acc, prop) => {
-					const key =
-						prop.key.type === "Identifier" ? prop.key.name : prop.key.value;
-					if (prop.value.type === "ObjectExpression") {
-						acc[key] = prop.value.properties.reduce((innerAcc, innerProp) => {
-							const innerKey =
-								innerProp.key.type === "Identifier"
-									? innerProp.key.name
-									: innerProp.key.value;
-							innerAcc[innerKey] = innerProp.value.value;
-							return innerAcc;
-						}, {});
-					} else {
-						acc[key] = prop.value.value;
-					}
-					return acc;
-				},
-				{},
-			);
+			// Step 1: go through the existing properties and check do they exist in the new translations object
+			// biome-ignore lint: forEach is inbuilt method to iterate nodes
+			path.node.init.properties.forEach((prop) => {
+				// Check property, if it exists in the new translations object - go inside of it and check values of the its properties, add new properties
+				if (prop.key.name in newTranslations) {
+					const newTranslationsProps = newTranslations[prop.key.name];
 
-			const mergedTranslations = deepMerge(existingProperties, newTranslations);
+					// Delete existing property from the new translations object
+					delete newTranslations[prop.key.name];
 
-			const properties = Object.entries(mergedTranslations).map(
-				([key, value]) => {
-					if (typeof value === "object" && !Array.isArray(value)) {
-						return j.property(
-							"init",
-							j.literal(key),
-							j.objectExpression(
-								Object.entries(value).map(([innerKey, innerValue]) =>
-									j.property(
-										"init",
-										j.literal(innerKey),
-										createASTNodeFromValue(j, innerValue),
-									),
-								),
-							),
-						);
-					}
+					// Checking values of the existing property
+					// biome-ignore lint: forEach is inbuilt method to iterate nodes
+					prop.value.properties.forEach((innerProp) => {
+						// Check if property exists in the new translations object
+						if (innerProp.key.name in newTranslationsProps) {
+							// Delete existing property from the new translations object
+							delete newTranslationsProps[innerProp.key.name];
+						}
+					});
+
+					// Add new properties to the existing property
+					prop.value.properties.push(
+						...Object.entries(newTranslationsProps).map(([key, value]) => {
+							return j.property(
+								"init",
+								j.stringLiteral(key),
+								j.stringLiteral(value),
+							);
+						}),
+					);
+				}
+			});
+
+			// Step 2: add new properties to the existing object
+			path.node.init.properties.push(
+				...Object.entries(newTranslations).map(([key, value]) => {
 					return j.property(
 						"init",
-						j.literal(key),
-						createASTNodeFromValue(j, value),
+						j.stringLiteral(key),
+						j.objectExpression(
+							Object.entries(value).map(([innerKey, innerValue]) => {
+								return j.property(
+									"init",
+									j.stringLiteral(innerKey),
+									j.stringLiteral(innerValue),
+								);
+							}),
+						),
 					);
-				},
+				}),
 			);
-
-			path.node.init = j.objectExpression(properties);
 		});
 
 	return root.toSource();

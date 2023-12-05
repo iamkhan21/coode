@@ -56,7 +56,7 @@ function removeFormatting(str) {
  * @returns {string} - The abbreviated form of the given text.
  */
 function getTextAbbr(text) {
-	return convertToSnakeCase(text.split(".")[0].trim().toLowerCase());
+	return convertToSnakeCase(text);
 }
 
 const attributeNames = [
@@ -211,7 +211,7 @@ module.exports = (fileInfo, api, options) => {
 	// Write translations for this file to a temporary file
 	const tempTranslationFilePath = path.join(
 		tempTranslationsDir,
-		`${path.basename(fileInfo.path)}.json`,
+		`${pageNameAbbr}.json`,
 	);
 
 	fs.writeFileSync(
