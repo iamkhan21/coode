@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v2.0.0
+
+[compare changes](https://github.com/iamkhan21/coode/compare/v1.4.5...v2.0.0)
+
+### 💅 Refactors
+
+- ⚠️  Simplify and refactor write-transcriptions.cjs and update @biomejs/biome version ([568b22e](https://github.com/iamkhan21/coode/commit/568b22e))
+
+### 🏡 Chore
+
+- **release:** V1.4.4 ([3096914](https://github.com/iamkhan21/coode/commit/3096914))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Simplify and refactor write-transcriptions.cjs and update @biomejs/biome version ([568b22e](https://github.com/iamkhan21/coode/commit/568b22e))
+
+### ❤️ Contributors
+
+- Ivan Khanevich <mail@iamkhan.tech>
+
 ## v1.4.5
 
 [compare changes](https://github.com/iamkhan21/coode/compare/v1.4.4...v1.4.5)
