@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v2.1.0
+
+[compare changes](https://github.com/iamkhan21/coode/compare/v2.0.0...v2.1.0)
+
+### 🚀 Enhancements
+
+- Add translation variable name to uniteTranslations function ([59a19ac](https://github.com/iamkhan21/coode/commit/59a19ac))
+
+### ❤️ Contributors
+
+- Ivan Khanevich <mail@iamkhan.tech>
+
 ## v2.0.0
 
 [compare changes](https://github.com/iamkhan21/coode/compare/v1.4.5...v2.0.0)
